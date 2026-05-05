@@ -22,12 +22,6 @@
 // ============================================================
 
 int main() {
-    // Устанавливаем UTF-8 кодировку консоли для корректного вывода кириллицы.
-    // SetConsoleOutputCP(CP_UTF8) — кодировка вывода (cout)
-    // SetConsoleCP(CP_UTF8)       — кодировка ввода (cin)
-    // setlocale(.UTF-8)           — локаль C++ runtime
-    // Это надёжнее чем setlocale("Russian") — работает на любых
-    // региональных настройках Windows, не только русских.
     SetConsoleOutputCP(CP_UTF8);
     SetConsoleCP(CP_UTF8);
     setlocale(LC_ALL, ".UTF-8");
