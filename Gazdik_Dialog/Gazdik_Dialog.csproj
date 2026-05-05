@@ -1,0 +1,33 @@
+<!--
+  Gazdik_Dialog.csproj — файл проекта C# WinForms
+  
+  Описывает как собрать C# GUI проект.
+  Формат SDK-style (современный, краткий).
+  
+  net9.0-windows — .NET 9, только для Windows
+  (WinForms работает только на Windows)
+-->
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- Тип: exe с WinForms -->
+    <OutputType>WinExe</OutputType>
+    
+    <!-- Целевая платформа: .NET 9, Windows -->
+    <TargetFramework>net9.0-windows</TargetFramework>
+    
+    <!-- Включаем WinForms -->
+    <UseWindowsForms>true</UseWindowsForms>
+    
+    <!-- Nullable reference types — современная фича C#, помогает избежать NullReferenceException -->
+    <Nullable>enable</Nullable>
+    
+    <!-- Implicit usings — автоматически добавляет стандартные using'и -->
+    <ImplicitUsings>enable</ImplicitUsings>
+    
+    <!-- Платформа: только x64 -->
+    <Platforms>x64</Platforms>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+
+</Project>

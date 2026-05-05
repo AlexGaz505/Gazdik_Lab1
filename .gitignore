@@ -1,0 +1,37 @@
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.ncb
+*.sdf
+*.opensdf
+
+# C++ Build output
+x64/
+Debug/
+Release/
+*.obj
+*.pdb
+*.ilk
+*.idb
+*.iobj
+*.ipdb
+*.exe
+*.dll
+*.lib
+*.exp
+*.log
+*.tlog
+*.lastbuildstate
+*.recipe
+*.FileListAbsolute.txt
+
+# C# Build output
+bin/
+obj/
+*.deps.json
+*.runtimeconfig.json
+
+# Прочее
+*.DS_Store
+Thumbs.db

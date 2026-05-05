@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Gazdik_Console.vcxproj — файл проекта Visual C++
+  
+  Этот файл описывает КАК собрать C++ проект:
+  - Какие файлы компилировать
+  - Какие настройки компилятора
+  - Под какую платформу (x64)
+  - Debug или Release
+  
+  Visual Studio читает этот файл и знает что делать.
+  Руками его трогать не нужно — VS управляет им сам
+  через меню Project Properties.
+-->
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <!-- Конфигурации: Debug x64 и Release x64 -->
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+
+  <!-- Общие настройки проекта -->
+  <PropertyGroup Label="Globals">
+    <!-- Уникальный GUID проекта — генерируется один раз -->
+    <ProjectGuid>{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>Gazdik_Console</RootNamespace>
+    <!-- Используем последний набор инструментов VS 2022 -->
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+
+  <!-- Настройки для каждой конфигурации -->
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>  <!-- это .exe, не .dll -->
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>             <!-- VS 2022 toolset -->
+    <CharacterSet>Unicode</CharacterSet>                <!-- Unicode (wchar_t) -->
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+
+  <!-- Настройки компилятора для Debug x64 -->
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>    <!-- C++17 -->
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>                   <!-- консольное приложение -->
+    </Link>
+  </ItemDefinitionGroup>
+
+  <!-- Настройки компилятора для Release x64 -->
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+
+  <!-- Заголовочные файлы (.h) -->
+  <ItemGroup>
+    <ClInclude Include="Gazdik_Interfaces.h" />
+    <ClInclude Include="Gazdik_Message.h" />
+    <ClInclude Include="Gazdik_Session.h" />
+    <ClInclude Include="Gazdik_ThreadManager.h" />
+  </ItemGroup>
+
+  <!-- Файлы реализации (.cpp) -->
+  <ItemGroup>
+    <ClCompile Include="Gazdik_Console.cpp" />
+    <ClCompile Include="Gazdik_Message.cpp" />
+    <ClCompile Include="Gazdik_Session.cpp" />
+    <ClCompile Include="Gazdik_ThreadManager.cpp" />
+  </ItemGroup>
+
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+</Project>
