@@ -2,14 +2,14 @@
 #include <iostream>
 
 std::map<int, Gazdik_ThreadInfo> Gazdik_ThreadManager::workers;
-std::mutex Gazdik_ThreadManager::mx;
+std::mutex                       Gazdik_ThreadManager::mx;
 
 Gazdik_ThreadManager::Gazdik_ThreadManager(int id) : targetId(id) {}
 
 void Gazdik_ThreadManager::send(Gazdik_Message& msg) const {
     std::lock_guard<std::mutex> lock(mx);
     int dest = (targetId < 0) ? msg.header.to : targetId;
-    auto it = workers.find(dest);
+    auto it  = workers.find(dest);
     if (it != workers.end()) {
         it->second.session->pushMessage(msg);
     }
@@ -37,13 +37,13 @@ DWORD WINAPI Gazdik_ThreadManager::threadFunc(LPVOID param) {
         std::cout << "Поток " << id << " запущен" << std::endl;
     }
 
-    bool canContinue = true;
-    while (canContinue) {
+    bool running = true;
+    while (running) {
         Gazdik_Message msg = Gazdik_Message::receiveMessage(Gazdik_ThreadManager(id));
 
         switch (msg.header.messageType) {
         case MT_CLOSE:
-            canContinue = false;
+            running = false;
             break;
         default:
             break;
@@ -61,9 +61,7 @@ DWORD WINAPI Gazdik_ThreadManager::threadFunc(LPVOID param) {
 void Gazdik_ThreadManager::createWorker(int id) {
     std::lock_guard<std::mutex> lock(mx);
 
-    Gazdik_ThreadInfo info;
-    info.session = std::make_shared<Gazdik_Session>(id);
-
+    auto session = std::make_shared<Gazdik_Session>(id);
     HANDLE hThread = CreateThread(
         NULL, 0,
         threadFunc,
@@ -72,33 +70,30 @@ void Gazdik_ThreadManager::createWorker(int id) {
     );
 
     if (hThread) {
-        info.handle = hThread;
-        workers[id] = std::move(info);
+        workers.emplace(id, Gazdik_ThreadInfo{ hThread, session });
     }
 }
 
 bool Gazdik_ThreadManager::terminateLast() {
     HANDLE hWait = NULL;
-    int tId = -1;
+    int    tId   = -1;
 
     {
         std::lock_guard<std::mutex> lock(mx);
         if (!workers.empty()) {
-            // map отсортирован по ключу — берём последний (наибольший id)
-            auto it = std::prev(workers.end());
-            tId  = it->first;
-            hWait = it->second.handle;
-            workers.erase(it);
+            auto last = std::prev(workers.end());
+            tId   = last->first;
+            hWait = last->second.handle;
+            workers.erase(last);
         }
     }
 
-    if (hWait && tId != -1) {
-        Gazdik_Message::sendMessage(Gazdik_ThreadManager(), tId, MT_CLOSE);
-        WaitForSingleObject(hWait, INFINITE);
-        CloseHandle(hWait);
-        return true;
-    }
-    return false;
+    if (tId == -1) return false;
+
+    Gazdik_Message::sendMessage(Gazdik_ThreadManager(), tId, MT_CLOSE);
+    WaitForSingleObject(hWait, INFINITE);
+    CloseHandle(hWait);
+    return true;
 }
 
 void Gazdik_ThreadManager::deinit() {
