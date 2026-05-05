@@ -77,7 +77,7 @@ namespace Gazdik_Dialog
                 // Путь к .exe — относительный от папки Gazdik_Dialog.exe
                 // ..\..\..\..\  — поднимаемся на 4 уровня вверх от bin\Debug\net9.0-windows\
                 // x64\Debug\    — папка с C++ Debug сборкой
-                consoleApp.StartInfo.FileName = @"C:\CProjects\repo\lab1\AC-23-04 Газдик\Lab1\";
+                consoleApp.StartInfo.FileName = @"..\..\..\..\..\x64\Debug\Gazdik_Console.exe";
 
                 // Хотим получать событие когда процесс завершится
                 consoleApp.EnableRaisingEvents = true;
