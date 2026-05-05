@@ -13,7 +13,7 @@ struct Gazdik_MessageHeader {
 
 struct Gazdik_Message {
     Gazdik_MessageHeader header = { 0 };
-    std::wstring data;          // полезная нагрузка сообщения (по диаграмме)
+    std::wstring data; // полезная нагрузка
 
     Gazdik_Message() = default;
     Gazdik_Message(Gazdik_MessageTypes type, std::wstring payload = L"");

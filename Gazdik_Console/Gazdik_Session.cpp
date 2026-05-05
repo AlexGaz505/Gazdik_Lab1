@@ -22,7 +22,6 @@ bool Gazdik_Session::pullMessage(Gazdik_Message& msg) {
         WaitForSingleObject(eventHandle, INFINITE);
 
         std::lock_guard<std::mutex> lock(mtx);
-
         if (!queue.empty()) {
             msg = queue.front();
             queue.pop();
@@ -32,7 +31,6 @@ bool Gazdik_Session::pullMessage(Gazdik_Message& msg) {
             }
             return true;
         }
-
         ResetEvent(eventHandle);
         hasMessages = false;
     }

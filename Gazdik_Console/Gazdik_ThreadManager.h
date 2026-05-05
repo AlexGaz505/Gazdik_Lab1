@@ -6,21 +6,16 @@
 #include "Gazdik_Session.h"
 #include "Gazdik_Interfaces.h"
 
-// Хранит все данные одного рабочего потока в одном месте.
-// Раньше HANDLE и Session хранились в отдельных параллельных
-// векторах — это неудобно и легко рассинхронизировать.
-// Теперь всё что относится к потоку лежит в одной структуре.
+// связанные данные потока в одном месте
 struct Gazdik_ThreadInfo {
-    HANDLE                          handle;   // дескриптор потока
-    std::shared_ptr<Gazdik_Session> session;  // почтовый ящик потока
+    HANDLE                          handle;
+    std::shared_ptr<Gazdik_Session> session;
 };
 
 class Gazdik_ThreadManager : public Gazdik_ISender, public Gazdik_IReceiver {
 private:
     int targetId;
 
-    // Один словарь id → ThreadInfo вместо двух параллельных векторов.
-    // Порядок создания отслеживаем через отдельный счётчик lastId.
     static std::map<int, Gazdik_ThreadInfo> workers;
     static std::mutex mx;
 

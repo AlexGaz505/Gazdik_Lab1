@@ -10,7 +10,7 @@ private:
     std::queue<Gazdik_Message> queue;
     std::mutex                 mtx;
     HANDLE                     eventHandle;
-    std::atomic<bool>          hasMessages;  // быстрая проверка без захвата мьютекса
+    std::atomic<bool>          hasMessages;
 
 public:
     int sessionId;
