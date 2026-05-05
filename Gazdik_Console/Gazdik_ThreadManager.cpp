@@ -94,15 +94,25 @@ bool Gazdik_ThreadManager::terminateLast() {
             auto last = std::prev(workers.end());
             tId   = last->first;
             hWait = last->second.handle;
-            workers.erase(last);
+            // НЕ удаляем из workers здесь — send() должен найти сессию
         }
     }
 
     if (tId == -1) return false;
 
+    // Отправляем MT_CLOSE — send() найдёт сессию в workers
     Gazdik_Message::sendMessage(Gazdik_ThreadManager(), tId, MT_CLOSE);
+
+    // Ждём реального завершения потока
     WaitForSingleObject(hWait, INFINITE);
     CloseHandle(hWait);
+
+    // Только теперь удаляем — поток уже завершился
+    {
+        std::lock_guard<std::mutex> lock(mx);
+        workers.erase(tId);
+    }
+
     return true;
 }
 
