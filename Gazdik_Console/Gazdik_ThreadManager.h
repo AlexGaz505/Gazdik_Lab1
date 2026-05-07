@@ -1,22 +1,19 @@
 #pragma once
 #include <windows.h>
 #include <map>
+#include <vector>
 #include <memory>
 #include <mutex>
 #include "Gazdik_Session.h"
 #include "Gazdik_Interfaces.h"
 
-// связанные данные потока в одном месте
-struct Gazdik_ThreadInfo {
-    HANDLE                          handle;
-    std::shared_ptr<Gazdik_Session> session;
-};
-
 class Gazdik_ThreadManager : public Gazdik_ISender, public Gazdik_IReceiver {
 private:
     int targetId;
 
-    static std::map<int, Gazdik_ThreadInfo> workers;
+    static std::map<int, std::shared_ptr<Gazdik_Session>> sessions;
+    static std::vector<HANDLE> threadHandles;
+    static std::vector<int> activeIds;
     static std::mutex mx;
 
     static DWORD WINAPI threadFunc(LPVOID param);
